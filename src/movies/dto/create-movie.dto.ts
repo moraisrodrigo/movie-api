@@ -13,7 +13,7 @@ export class CreateMovieDto {
   description: string;
 
   @ApiProperty()
-  @IsDate()
+  @IsString()
   @IsNotEmpty()
   releaseDate: Date;
 

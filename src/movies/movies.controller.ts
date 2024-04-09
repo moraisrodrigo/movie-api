@@ -35,13 +35,6 @@ export class MoviesController {
     const totalPages = Math.ceil(total / limit);
     return { movies, total, page, totalPages };
   }
-
-  //EndPoint used to generate dummy data
-  // @Get('seed')
-  // @ApiOperation({ summary: 'Seed database' })
-  // async seed() {
-  //   return await this.moviesService.seed();
-  // }
   
   @Get('search')
   @ApiOperation({ summary: 'Search movies by title and genre' })

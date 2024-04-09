@@ -42,7 +42,7 @@ export class GenresService {
     await this.moviesService.removeGenreFromMovies(genre);
 
     // Delete the genre
-    await this.genreRepository.delete(id);
+    await this.genreRepository.remove(genre);
   }
 
   /**

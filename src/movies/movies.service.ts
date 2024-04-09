@@ -29,6 +29,7 @@ export class MoviesService {
    */
   async findAll(page = 1, limit = 10): Promise<{ movies: Movie[]; total: number }> {
     const [movies, total] = await this.movieRepository.findAndCount({
+      relations: ['genres'],
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -123,7 +124,7 @@ export class MoviesService {
    * @param genre The genre to remove from all movies
    */
   async removeGenreFromMovies(genre: Genre): Promise<void> {
-    await this.movieRepository
+    return this.movieRepository
       .createQueryBuilder()
       .relation(Movie, 'genres')
       .of(genre)

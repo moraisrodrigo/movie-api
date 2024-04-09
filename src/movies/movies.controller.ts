@@ -18,11 +18,20 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './movie.entity';
 
+/**
+ * Controller responsible for handling movie-related HTTP requests.
+ */
 @ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
+  /**
+   * Retrieves a paginated list of all movies.
+   * @param page The page number (optional, default is 1)
+   * @param limit The maximum number of movies per page (optional, default is 10)
+   * @returns An object containing the list of movies, total count, current page number, and total pages.
+   */
   @Get()
   @ApiOperation({ summary: 'List all movies' })
   @ApiQuery({ name: 'page', required: false })
@@ -36,6 +45,13 @@ export class MoviesController {
     return { movies, total, page, totalPages };
   }
   
+  /**
+   * Searches movies by title and/or genre.
+   * @param title The title to search for (optional)
+   * @param genre The genre to search for (optional)
+   * @returns A list of movies matching the search criteria.
+   * @throws BadRequestException if neither title nor genre is provided.
+   */
   @Get('search')
   @ApiOperation({ summary: 'Search movies by title and genre' })
   @ApiQuery({ name: 'title', required: false })
@@ -50,6 +66,12 @@ export class MoviesController {
     return await this.moviesService.search({ title, genre });
   }
 
+  /**
+   * Retrieves a movie by its ID.
+   * @param id The ID of the movie.
+   * @returns The movie object.
+   * @throws NotFoundException if the movie with the specified ID is not found.
+   */
   @Get(':id')
   @ApiOperation({ summary: 'Get movies by Id' })
   async findOne(@Param('id') id: number): Promise<Movie> {
@@ -60,12 +82,23 @@ export class MoviesController {
     return movie;
   }
 
+  /**
+   * Creates a new movie.
+   * @param createMovieDto The DTO containing the data for creating a movie.
+   * @returns The newly created movie object.
+   */
   @Post()
   @ApiOperation({ summary: 'Create a new Movie' })
   async create(@Body() createMovieDto: CreateMovieDto): Promise<Movie> {
     return await this.moviesService.create(createMovieDto);
   }
 
+  /**
+   * Updates an existing movie.
+   * @param id The ID of the movie to update.
+   * @param updateMovieDto The DTO containing the data for updating the movie.
+   * @returns The updated movie object.
+   */
   @Put(':id')
   @ApiOperation({ summary: 'Update a Movie' })
   async update(
@@ -75,6 +108,11 @@ export class MoviesController {
     return await this.moviesService.update(id, updateMovieDto);
   }
 
+  /**
+   * Deletes a movie.
+   * @param id The ID of the movie to delete.
+   * @throws NotFoundException if the movie with the specified ID is not found.
+   */
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a Movie' })
   async remove(@Param('id') id: number): Promise<void> {

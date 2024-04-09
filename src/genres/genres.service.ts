@@ -19,10 +19,19 @@ export class GenresService {
     private readonly moviesService: MoviesService,
   ) {}
 
+  /**
+   * Retrieves a list of all genres.
+   * @returns A Promise that resolves to an array of Genre entities.
+   */
   async findAll(): Promise<Genre[]> {
     return await this.genreRepository.find();
   }
 
+  /**
+   * Deletes a genre by ID.
+   * @param id The ID of the genre to delete.
+   * @throws NotFoundException if the genre with the specified ID is not found.
+   */
   async deleteGenre(id: number): Promise<void> {
     // Find the genre by id
     const genre = await this.genreRepository.findOne({ where: { id } });
@@ -36,6 +45,11 @@ export class GenresService {
     await this.genreRepository.delete(id);
   }
 
+  /**
+   * Creates a new genre.
+   * @param createGenreDto The data to create a new genre.
+   * @returns A Promise that resolves to the newly created Genre entity.
+   */
   async create(createGenreDto: CreateGenreDto): Promise<Genre> {
     const { name } = createGenreDto;
 
@@ -46,6 +60,11 @@ export class GenresService {
     return await this.genreRepository.save(genre);
   }
 
+  /**
+   * Creates multiple genres.
+   * @param genreNames An array of genre names.
+   * @returns A Promise that resolves to an array of Genre entities.
+   */
   async createMultiple(genreNames: string[]): Promise<Genre[]> {
     const genrePromises: Promise<Genre>[] = genreNames.map(async (name) => {
       let genre = await this.genreRepository.findOne({ where: { name } });
